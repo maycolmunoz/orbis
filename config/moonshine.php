@@ -18,7 +18,7 @@ use MoonShine\Laravel\Pages\LoginPage;
 use MoonShine\Laravel\Pages\ProfilePage;
 
 return [
-    'title' => env('MOONSHINE_TITLE', 'Compranax'),
+    'title' => env('MOONSHINE_TITLE', 'Orbis'),
     'logo' => '/icon.svg',
     'logo_small' => '/icon.svg',
 

@@ -3,12 +3,19 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "internachi/modular": "^2.3",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
+        "modules/inventories": "^1.0",
+        "modules/moonlaunch": "^1.0",
+        "modules/sales": "^1.0",
         "moonshine/import-export": "^1.0",
         "moonshine/moonshine": "^3.4",
         "sweet1s/moonshine-roles-permissions": "^3.0"
@@ -19,7 +26,7 @@
         "laravel-shift/blueprint": "^2.11",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.20",
-        "laravel/sail": "^1.26",
+        "laravel/sail": "^1.44",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
         "pestphp/pest": "^3.7",
@@ -73,5 +80,14 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "path",
+            "url": "app-modules/*",
+            "options": {
+                "symlink": true
+            }
+        }
+    ]
 }

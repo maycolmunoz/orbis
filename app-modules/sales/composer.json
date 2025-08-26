@@ -1,0 +1,24 @@
+{
+	"name": "modules/sales",
+	"description": "",
+	"type": "library",
+	"version": "1.0",
+	"license": "proprietary",
+	"require": {},
+	"autoload": {
+		"psr-4": {
+			"Modules\\Sales\\": "src/",
+			"Modules\\Sales\\Tests\\": "tests/",
+			"Modules\\Sales\\Database\\Factories\\": "database/factories/",
+			"Modules\\Sales\\Database\\Seeders\\": "database/seeders/"
+		}
+	},
+	"minimum-stability": "stable",
+	"extra": {
+		"laravel": {
+			"providers": [
+				"Modules\\Sales\\Providers\\SalesServiceProvider"
+			]
+		}
+	}
+}
