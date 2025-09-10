@@ -1,6 +1,6 @@
 | Package                     | Version | Description                  |
 | --------------------------- | ------- | ---------------------------- |
-| Laravel                     | v11     | Core PHP framework           |
+| Laravel                     | v12     | Core PHP framework           |
 | MoonShine                   | v3      | Admin panel                  |
 | moonshine-roles-permissions | v3      | Roles and permissions system |
 | internachi/modular          | v2      | Modular architecture         |
