@@ -1,3 +1,13 @@
+<p align="center">
+  <img src="./_docs/icon.svg" alt="Orbis Logo" width="80"/>
+</p>
+
+# Orbis
+
+**Orbis** is a modular ERP designed for business management.  
+
+---
+
 | Package                     | Version | Description                  |
 | --------------------------- | ------- | ---------------------------- |
 | Laravel                     | v12     | Core PHP framework           |
@@ -22,6 +32,7 @@
     ```
 
 3. Run the installer:
+
     ```bash
     php artisan launch:install
     ```
