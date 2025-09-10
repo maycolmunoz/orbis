@@ -5,6 +5,8 @@
 /public/storage
 /storage/*.key
 /storage/pail
+/draft.yaml
+/.blueprint
 /vendor
 .env
 .env.backup
