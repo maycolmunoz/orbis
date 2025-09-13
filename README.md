@@ -40,4 +40,5 @@
 4. Set test data
     ```sh
     php artisan db:seed
+    cp -r resources/images/products storage/app/public/products
     ```

@@ -29,6 +29,11 @@ class ProductFactory extends Factory
             'stock' => fake()->numberBetween(0, 1000),
             'category_id' => Category::factory(),
             'supplier_id' => Supplier::factory(),
+            'images' => [
+                'products/product.png',
+                'products/product.png',
+                'products/product.png',
+            ],
         ];
     }
 }

@@ -124,7 +124,7 @@ class ProductResource extends ModelResource implements HasImportExportContract
                 ->sortable(),
 
             Number::make('stock')->translatable('inventories::ui.label')
-                ->badge(fn($value) => $value > 10 ? 'green' : 'red')
+                ->badge(fn ($value) => $value > 10 ? 'green' : 'red')
                 ->sortable(),
 
             Date::make('created_at')->translatable('inventories::ui.label')
