@@ -19,6 +19,7 @@ return [
         'products' => 'Products',
         'category' => 'Category',
         'supplier' => 'Supplier',
+        'settings' => 'Settings',
 
         'code' => 'Code',
         'price' => 'Price',

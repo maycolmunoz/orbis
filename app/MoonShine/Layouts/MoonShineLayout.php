@@ -45,9 +45,9 @@ final class MoonShineLayout extends AppLayout
     protected function menu(): array
     {
         return [
-            ...app(Launch::class)->getMenu(),
             ...app(InventoryModule::class)->getMenu(),
             ...app(SaleModule::class)->getMenu(),
+            ...app(Launch::class)->getMenu(),
         ];
     }
 

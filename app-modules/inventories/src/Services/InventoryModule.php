@@ -26,16 +26,20 @@ class InventoryModule
     {
         return MenuRBAC::menu(
             MenuGroup::make('inventory', [
-                MenuItem::make('categories', CategoryResource::class)
-                    ->translatable('inventories::ui.resource'),
-
-                MenuItem::make('suppliers', SupplierResource::class)
-                    ->translatable('inventories::ui.resource'),
 
                 MenuItem::make('products', ProductResource::class)
                     ->translatable('inventories::ui.resource'),
-            ], 's.archive-box')->translatable('inventories::ui.resource'),
 
+                MenuGroup::make('settings', [
+                    MenuItem::make('categories', CategoryResource::class)
+                        ->translatable('inventories::ui.resource'),
+
+                    MenuItem::make('suppliers', SupplierResource::class)
+                        ->translatable('inventories::ui.resource'),
+
+                ], 'm.wrench')->translatable('inventories::ui.label'),
+
+            ], 's.archive-box')->translatable('inventories::ui.resource'),
         );
     }
 }
