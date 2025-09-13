@@ -3,7 +3,6 @@
 namespace Modules\Inventories\Services;
 
 use Modules\Inventories\MoonShine\Resources\CategoryResource;
-use Modules\Inventories\MoonShine\Resources\ImageResource;
 use Modules\Inventories\MoonShine\Resources\ProductResource;
 use Modules\Inventories\MoonShine\Resources\SupplierResource;
 use MoonShine\MenuManager\MenuGroup;
@@ -18,7 +17,6 @@ class InventoryModule
             CategoryResource::class,
             ProductResource::class,
             SupplierResource::class,
-            ImageResource::class,
         ];
     }
 

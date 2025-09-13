@@ -5,8 +5,6 @@ namespace Modules\Inventories\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Product extends Model
 {
@@ -20,6 +18,7 @@ class Product extends Model
     protected $fillable = [
         'code',
         'name',
+        'images',
         'description',
         'price',
         'stock',
@@ -34,20 +33,11 @@ class Product extends Model
      */
     protected $casts = [
         'id' => 'integer',
+        'images' => 'array',
         'price' => 'decimal:2',
         'category_id' => 'integer',
         'supplier_id' => 'integer',
     ];
-
-    public function images(): HasMany
-    {
-        return $this->hasMany(Image::class);
-    }
-
-    public function image(): HasOne
-    {
-        return $this->hasOne(Image::class);
-    }
 
     public function category(): BelongsTo
     {

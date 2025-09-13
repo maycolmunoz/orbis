@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Modules\Inventories\MoonShine\Resources;
 
+use Illuminate\Validation\Rule;
 use Modules\Inventories\Models\Product;
 use Modules\Moonlaunch\Traits\Properties;
 use MoonShine\Contracts\UI\ComponentContract;
@@ -11,7 +12,6 @@ use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\ImportExport\Contracts\HasImportExportContract;
 use MoonShine\ImportExport\Traits\ImportExportConcern;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
-use MoonShine\Laravel\Fields\Relationships\RelationRepeater;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Attributes\Icon;
 use MoonShine\UI\Components\Layout\Box;
@@ -20,7 +20,7 @@ use MoonShine\UI\Components\Layout\Flex;
 use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\ID;
-use MoonShine\UI\Fields\Image as IMG;
+use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Textarea;
@@ -42,7 +42,6 @@ class ProductResource extends ModelResource implements HasImportExportContract
             ->errorsAbove(false)
             ->columnSelection()
             ->itemsPerPage(15)
-            ->with(['image'])
             ->column('name')
             ->async(false);
     }
@@ -85,7 +84,7 @@ class ProductResource extends ModelResource implements HasImportExportContract
 
     protected function search(): array
     {
-        return ['id', 'code', 'name'];
+        return ['code', 'name'];
     }
 
     protected function filters(): iterable
@@ -106,30 +105,31 @@ class ProductResource extends ModelResource implements HasImportExportContract
     protected function indexFields(): iterable
     {
         return [
-            ID::make()->sortable(),
-
-            Img::make('image', 'image.name')->translatable('inventories::ui.label')
-                ->disk('products'),
+            Image::make('images')->multiple()
+                ->translatable('inventories::ui.label'),
 
             Number::make('code')->translatable('inventories::ui.label'),
 
             Text::make('name')->translatable('inventories::ui.label'),
 
+            BelongsTo::make('category', resource: CategoryResource::class)
+                ->translatable('inventories::ui.label')
+                ->badge('primary'),
+
+            BelongsTo::make('supplier', resource: SupplierResource::class)
+                ->translatable('inventories::ui.label')
+                ->columnSelection(hideOnInit: true),
+
             Text::make('price')->translatable('inventories::ui.label')
                 ->sortable(),
 
             Number::make('stock')->translatable('inventories::ui.label')
-                ->badge(fn ($value) => $value > 10 ? 'green' : 'red')
+                ->badge(fn($value) => $value > 10 ? 'green' : 'red')
                 ->sortable(),
 
-            BelongsTo::make('category', resource: CategoryResource::class)
-                ->translatable('inventories::ui.label'),
-
-            BelongsTo::make('supplier', resource: SupplierResource::class)
-                ->translatable('inventories::ui.label'),
-
             Date::make('created_at')->translatable('inventories::ui.label')
-                ->format('d/M/Y'),
+                ->format('d/M/Y')
+                ->columnSelection(hideOnInit: true),
         ];
     }
 
@@ -144,34 +144,35 @@ class ProductResource extends ModelResource implements HasImportExportContract
                     Column::make([
                         Text::make('name')->translatable('inventories::ui.label'),
 
-                        Number::make('code')->translatable('inventories::ui.label'),
+                        Flex::make([
+                            Number::make('code')->translatable('inventories::ui.label'),
+
+                            BelongsTo::make('category', resource: CategoryResource::class)
+                                ->translatable('inventories::ui.label'),
+                        ]),
 
                         Flex::make([
-                            Text::make('price')->translatable('inventories::ui.label'),
+                            Text::make('price')->translatable('inventories::ui.label')
+                                ->required(),
 
                             Number::make('stock')->translatable('inventories::ui.label')
                                 ->buttons(),
                         ]),
 
-                        BelongsTo::make('category', resource: CategoryResource::class)
-                            ->translatable('inventories::ui.label'),
-
                         BelongsTo::make('supplier', resource: SupplierResource::class)
                             ->translatable('inventories::ui.label')
                             ->nullable(),
-
                     ], 6),
 
                     Column::make([
-                        Textarea::make('description')->translatable('inventories::ui.label'),
+                        Textarea::make('description')->translatable('inventories::ui.label')
+                            ->required(),
 
-                        RelationRepeater::make('images', resource: ImageResource::class)
-                            ->translatable('inventories::ui.label')
-                            ->fields([
-                                Img::make('', 'name')->disk('products'),
-                            ])
-                            ->creatable(limit: 3)
-                            ->removable(),
+                        Image::make('images')->translatable('inventories::ui.label')
+                            ->dir('products')
+                            ->multiple()
+                            ->removable()
+                            ->allowedExtensions(['png', 'jpg', 'webp']),
                     ], 6),
                 ]),
 
@@ -184,36 +185,7 @@ class ProductResource extends ModelResource implements HasImportExportContract
      */
     protected function detailFields(): iterable
     {
-        return [
-            ID::make()->sortable(),
-
-            Number::make('code')->translatable('inventories::ui.label'),
-
-            Text::make('name')->translatable('inventories::ui.label'),
-
-            Text::make('price')->translatable('inventories::ui.label'),
-
-            Number::make('stock')->translatable('inventories::ui.label')
-                ->badge(fn ($value) => $value > 10 ? 'green' : 'red'),
-
-            BelongsTo::make('category', resource: CategoryResource::class)
-                ->translatable('inventories::ui.label'),
-
-            BelongsTo::make('supplier', resource: SupplierResource::class)
-                ->translatable('inventories::ui.label'),
-
-            Date::make('created_at')->translatable('inventories::ui.label')
-                ->format('d/M/Y'),
-
-            Textarea::make('description')->translatable('inventories::ui.label'),
-
-            RelationRepeater::make('images', resource: ImageResource::class)
-                ->translatable('inventories::ui.label')
-                ->fields([
-                    Img::make('', 'name')->disk('products'),
-                ]),
-
-        ];
+        return $this->indexFields();
     }
 
     /**
@@ -225,14 +197,15 @@ class ProductResource extends ModelResource implements HasImportExportContract
     protected function rules(mixed $item): array
     {
         return [
-            'code' => 'required|string|max:14|unique:products,code'.
-                moonshineRequest()->isMethod('post') ? '' : $item->id,
+            'code' => ['required', 'string', 'max:14', Rule::unique('products', 'code')->ignore($item?->id)],
             'name' => 'required|string|max:100',
             'description' => 'required|string|max:1000',
             'price' => 'required|numeric|min:0|max:99999999.99',
             'stock' => 'required|integer|min:0',
             'category_id' => 'required|exists:categories,id',
             'supplier_id' => 'nullable|exists:suppliers,id',
+            'images' => 'nullable|array|max:3',
+            'images.*' => 'file|mimes:png,jpg,webp|max:2048',
         ];
     }
 }

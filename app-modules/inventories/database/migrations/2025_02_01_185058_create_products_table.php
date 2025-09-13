@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('code', 14)->unique();
             $table->string('name', 100);
+            $table->json('images')->nullable();
             $table->text('description');
             $table->decimal('price', 10, 2);
             $table->integer('stock');
