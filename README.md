@@ -1,10 +1,12 @@
 <p align="center">
-  <img src="./_docs/icon.svg" alt="Orbis Logo" width="80"/>
+  <img src="_docs/icon.svg" alt="Orbis Logo" width="80"/>
 </p>
 
 # Orbis
 
-**Orbis** is a modular ERP designed for business management.  
+**Orbis** is a modular ERP designed for business management.
+
+![Orbis Screenshot](_docs/screenshot.webp)
 
 ---
 
