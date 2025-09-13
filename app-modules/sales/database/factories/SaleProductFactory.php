@@ -24,7 +24,7 @@ class SaleProductFactory extends Factory
         return [
             'sale_id' => Sale::factory(),
             'product_id' => Product::factory(),
-            'quantity' => fake()->numberBetween(-10000, 10000),
+            'quantity' => fake()->numberBetween(0, 10000),
         ];
     }
 }

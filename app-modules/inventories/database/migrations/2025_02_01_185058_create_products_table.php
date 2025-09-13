@@ -11,8 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('code', 14)->unique();
@@ -20,13 +18,19 @@ return new class extends Migration
             $table->json('images')->nullable();
             $table->text('description');
             $table->decimal('price', 10, 2);
-            $table->integer('stock');
-            $table->foreignId('category_id')->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignId('supplier_id')->nullable()->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->unsignedInteger('stock');
+
+            $table->foreignId('category_id')
+                ->constrained()
+                ->cascadeOnDelete('categories');
+
+            $table->foreignId('supplier_id')
+                ->nullable()
+                ->constrained('suppliers')
+                ->cascadeOnDelete();
+
             $table->timestamps();
         });
-
-        Schema::enableForeignKeyConstraints();
     }
 
     /**

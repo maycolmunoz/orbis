@@ -11,16 +11,17 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::disableForeignKeyConstraints();
-
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('customer_id')->nullable()->constrained('users')->cascadeOnDelete()->cascadeOnUpdate();
             $table->decimal('total_amount', 15, 2);
+
+            $table->foreignId('customer_id')
+                ->nullable()
+                ->constrained('users')
+                ->cascadeOnDelete();
+
             $table->timestamps();
         });
-
-        Schema::enableForeignKeyConstraints();
     }
 
     /**
