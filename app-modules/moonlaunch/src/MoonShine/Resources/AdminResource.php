@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Modules\Moonlaunch\MoonShine\Resources;
 
-use App\Models\User;
 use Illuminate\Validation\Rule;
+use Modules\Moonlaunch\Models\User;
 use Modules\Moonlaunch\Traits\Properties;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Fields\Relationships\BelongsToMany;
