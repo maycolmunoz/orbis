@@ -19,7 +19,6 @@ use MoonShine\UI\Components\Layout\Column;
 use MoonShine\UI\Components\Layout\Flex;
 use MoonShine\UI\Components\Layout\Grid;
 use MoonShine\UI\Fields\Date;
-use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Text;
@@ -49,8 +48,6 @@ class ProductResource extends ModelResource implements HasImportExportContract
     private function exportAndImport(): iterable
     {
         return [
-            ID::make(),
-
             Number::make('code')->translatable('inventories::ui.label'),
 
             Text::make('name')->translatable('inventories::ui.label'),

@@ -15,7 +15,6 @@ use MoonShine\Support\Attributes\Icon;
 use MoonShine\Support\Enums\PageType;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Components\Layout\Box;
-use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Text;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
@@ -47,7 +46,6 @@ class CategoryResource extends ModelResource
     private function fields(): array
     {
         return [
-            ID::make()->sortable(),
             Text::make('name')->translatable('inventories::ui.label'),
         ];
     }

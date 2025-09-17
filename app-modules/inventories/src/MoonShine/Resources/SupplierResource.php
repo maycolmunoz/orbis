@@ -15,7 +15,6 @@ use MoonShine\Support\Attributes\Icon;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\Email;
-use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Json;
 use MoonShine\UI\Fields\Phone;
 use MoonShine\UI\Fields\Text;
@@ -48,14 +47,12 @@ class SupplierResource extends ModelResource
 
     protected function search(): array
     {
-        return ['id', 'name'];
+        return ['name'];
     }
 
     private function fields($vertical = false): array
     {
         return [
-            ID::make()->sortable(),
-
             Text::make('name')->translatable('inventories::ui.label'),
 
             Json::make('contact_info')->translatable('inventories::ui.label')

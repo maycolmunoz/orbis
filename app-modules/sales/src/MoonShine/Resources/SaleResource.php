@@ -14,7 +14,6 @@ use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Attributes\Icon;
 use MoonShine\Support\ListOf;
 use MoonShine\UI\Fields\Date;
-use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Text;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
@@ -47,8 +46,6 @@ class SaleResource extends ModelResource
     protected function indexFields(): iterable
     {
         return [
-            ID::make()->sortable(),
-
             BelongsToMany::make('products', resource: ProductResource::class)
                 ->translatable('sales::ui.label')
                 ->onlyCount()
