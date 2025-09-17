@@ -46,7 +46,9 @@ class CategoryResource extends ModelResource
     private function fields(): array
     {
         return [
-            Text::make('name')->translatable('inventories::ui.label'),
+            Text::make('name')->translatable('inventories::ui.label')
+                ->sortable()
+                ->required(),
         ];
     }
 

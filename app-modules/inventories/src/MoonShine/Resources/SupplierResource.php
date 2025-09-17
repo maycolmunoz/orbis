@@ -53,7 +53,9 @@ class SupplierResource extends ModelResource
     private function fields($vertical = false): array
     {
         return [
-            Text::make('name')->translatable('inventories::ui.label'),
+            Text::make('name')->translatable('inventories::ui.label')
+                ->sortable()
+                ->required(),
 
             Json::make('contact_info')->translatable('inventories::ui.label')
                 ->fields([

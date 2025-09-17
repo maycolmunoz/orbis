@@ -102,12 +102,13 @@ class ProductResource extends ModelResource implements HasImportExportContract
     protected function indexFields(): iterable
     {
         return [
-            Image::make('images')->multiple()
-                ->translatable('inventories::ui.label'),
+            Image::make('images')->translatable('inventories::ui.label')
+                ->multiple(),
 
             Number::make('code')->translatable('inventories::ui.label'),
 
-            Text::make('name')->translatable('inventories::ui.label'),
+            Text::make('name')->translatable('inventories::ui.label')
+                ->sortable(),
 
             BelongsTo::make('category', resource: CategoryResource::class)
                 ->translatable('inventories::ui.label')
@@ -126,6 +127,7 @@ class ProductResource extends ModelResource implements HasImportExportContract
 
             Date::make('created_at')->translatable('inventories::ui.label')
                 ->format('d/M/Y')
+                ->sortable()
                 ->columnSelection(hideOnInit: true),
         ];
     }
@@ -139,13 +141,15 @@ class ProductResource extends ModelResource implements HasImportExportContract
             Box::make([
                 Grid::make([
                     Column::make([
-                        Text::make('name')->translatable('inventories::ui.label'),
+                        Text::make('name')->translatable('inventories::ui.label')
+                            ->required(),
 
                         Flex::make([
                             Number::make('code')->translatable('inventories::ui.label'),
 
                             BelongsTo::make('category', resource: CategoryResource::class)
-                                ->translatable('inventories::ui.label'),
+                                ->translatable('inventories::ui.label')
+                                ->required(),
                         ]),
 
                         Flex::make([
@@ -153,6 +157,7 @@ class ProductResource extends ModelResource implements HasImportExportContract
                                 ->required(),
 
                             Number::make('stock')->translatable('inventories::ui.label')
+                                ->required()
                                 ->buttons(),
                         ]),
 
