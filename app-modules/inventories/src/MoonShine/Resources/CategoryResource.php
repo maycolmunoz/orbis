@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Modules\Inventories\MoonShine\Resources;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Validation\Rule;
 use Modules\Inventories\Models\Category;
 use Modules\Moonlaunch\Traits\Properties;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Enums\Action;
-use MoonShine\Laravel\Fields\Relationships\HasMany;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Attributes\Icon;
 use MoonShine\Support\Enums\PageType;
@@ -37,6 +38,11 @@ class CategoryResource extends ModelResource
             ->allInModal();
     }
 
+    protected function modifyQueryBuilder(Builder $builder): Builder
+    {
+        return $builder->withCount('products');
+    }
+
     protected function activeActions(): ListOf
     {
         return parent::activeActions()
@@ -59,10 +65,9 @@ class CategoryResource extends ModelResource
     {
         return [
             ...$this->fields(),
-            HasMany::make('products', resource: ProductResource::class)
+            Text::make('products', 'products_count')
                 ->translatable('inventories::ui.label')
-                ->relatedLink(),
-
+                ->sortable(),
         ];
     }
 
@@ -85,9 +90,12 @@ class CategoryResource extends ModelResource
     protected function rules(mixed $item): array
     {
         return [
-            'name' => moonshineRequest()->isMethod('post')
-                ? 'required|string|unique:categories,name'
-                : 'required|string|unique:categories,name,'.$item->id,
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('categories', 'name')->ignore($item?->id),
+            ],
         ];
+
     }
 }
