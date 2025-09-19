@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Modules\Inventories\MoonShine\Resources;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Validation\Rule;
 use Modules\Inventories\Models\Supplier;
 use Modules\Moonlaunch\Traits\Properties;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
-use MoonShine\Laravel\Enums\Action;
-use MoonShine\Laravel\Fields\Relationships\HasMany;
 use MoonShine\Laravel\Resources\ModelResource;
 use MoonShine\Support\Attributes\Icon;
-use MoonShine\Support\ListOf;
+use MoonShine\Support\Enums\PageType;
 use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\Email;
 use MoonShine\UI\Fields\Json;
@@ -34,39 +34,21 @@ class SupplierResource extends ModelResource
     public function __construct()
     {
         $this->title(__('inventories::ui.resource.suppliers'))
-            ->async(false)
+            ->redirectAfterSave(PageType::INDEX)
             ->errorsAbove(false)
+            ->allInModal()
+            ->async(false)
             ->column('name');
     }
 
-    protected function activeActions(): ListOf
+    protected function modifyQueryBuilder(Builder $builder): Builder
     {
-        return parent::activeActions()
-            ->except(Action::VIEW);
+        return $builder->withCount('products');
     }
 
     protected function search(): array
     {
-        return ['name'];
-    }
-
-    private function fields($vertical = false): array
-    {
-        return [
-            Text::make('name')->translatable('inventories::ui.label')
-                ->sortable()
-                ->required(),
-
-            Json::make('contact_info')->translatable('inventories::ui.label')
-                ->fields([
-                    Email::make('email')->translatable('inventories::ui.label'),
-                    Phone::make('phone')->translatable('inventories::ui.label'),
-                    Text::make('address')->translatable('inventories::ui.label'),
-                    Url::make('website')->translatable('inventories::ui.label'),
-                ])
-                ->creatable(limit: 2)
-                ->vertical($vertical),
-        ];
+        return ['name', 'contact_info->[*]->email'];
     }
 
     /**
@@ -75,10 +57,11 @@ class SupplierResource extends ModelResource
     protected function indexFields(): iterable
     {
         return [
-            ...$this->fields(true),
-            HasMany::make('products', resource: ProductResource::class)
+            Text::make('name')->translatable('inventories::ui.label')
+                ->sortable(),
+            Text::make('products', 'products_count')
                 ->translatable('inventories::ui.label')
-                ->relatedLink(),
+                ->sortable(),
         ];
     }
 
@@ -89,11 +72,17 @@ class SupplierResource extends ModelResource
     {
         return [
             Box::make([
-                ...$this->fields(),
-
-                HasMany::make('products', resource: ProductResource::class)
-                    ->translatable('inventories::ui.label')
-                    ->creatable(),
+                Text::make('name')->translatable('inventories::ui.label')
+                    ->required(),
+                Json::make('contact_info')->translatable('inventories::ui.label')
+                    ->creatable(limit: 2)
+                    ->removable()
+                    ->fields([
+                        Email::make('email')->translatable('inventories::ui.label'),
+                        Phone::make('phone')->translatable('inventories::ui.label'),
+                        Text::make('address')->translatable('inventories::ui.label'),
+                        Url::make('website')->translatable('inventories::ui.label'),
+                    ]),
             ]),
         ];
     }
@@ -103,7 +92,18 @@ class SupplierResource extends ModelResource
      */
     protected function detailFields(): iterable
     {
-        return $this->fields();
+        return [
+            Text::make('name')->translatable('inventories::ui.label'),
+            Json::make('contact_info')->translatable('inventories::ui.label')
+                ->creatable(limit: 2)
+                ->fields([
+                    Email::make('email')->translatable('inventories::ui.label'),
+                    Phone::make('phone')->translatable('inventories::ui.label'),
+                    Text::make('address')->translatable('inventories::ui.label'),
+                    Url::make('website')->translatable('inventories::ui.label')
+                        ->blank(),
+                ]),
+        ];
     }
 
     /**
@@ -115,9 +115,11 @@ class SupplierResource extends ModelResource
     protected function rules(mixed $item): array
     {
         return [
-            'name' => moonshineRequest()->isMethod('post')
-                ? 'required|string|unique:suppliers,name'
-                : 'required|string|unique:suppliers,name,'.$item->id,
+            'name' => [
+                'required',
+                'string',
+                Rule::unique('suppliers', 'name')->ignore($item?->id),
+            ],
         ];
     }
 }
