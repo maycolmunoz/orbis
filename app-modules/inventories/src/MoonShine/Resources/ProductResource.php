@@ -94,7 +94,8 @@ class ProductResource extends ModelResource implements HasImportExportContract
     {
         return [
             BelongsTo::make('category', resource: CategoryResource::class)
-                ->translatable('inventories::ui.label'),
+                ->translatable('inventories::ui.label')
+                ->nullable(),
 
             BelongsTo::make('supplier', resource: SupplierResource::class)
                 ->translatable('inventories::ui.label')

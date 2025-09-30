@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Modules\Sales\MoonShine\Pages;
 
-use Modules\Inventories\Models\Product;
 use Modules\Inventories\MoonShine\Resources\ProductResource;
 use Modules\Sales\Models\Sale;
+use Modules\Sales\Services\CartService;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Laravel\Components\Fragment;
 use MoonShine\Laravel\Fields\Relationships\BelongsTo;
@@ -33,6 +33,8 @@ class POS extends Page
 {
     protected ?string $alias = 'pos';
 
+    public function __construct(protected CartService $cartService) {}
+
     /**
      * @return array<string, string>
      */
@@ -56,21 +58,6 @@ class POS extends Page
     public function getTitle(): string
     {
         return $this->title ?: 'POS';
-    }
-
-    private function getProducts(): array
-    {
-        return session('products', []);
-    }
-
-    private function putProducts(array $products): void
-    {
-        session()->put('products', $products);
-    }
-
-    public function total()
-    {
-        return array_reduce($this->getProducts(), fn ($total, $p) => $total + ($p['price'] * $p['quantity']), 0);
     }
 
     private function events(): array
@@ -98,7 +85,8 @@ class POS extends Page
                     Column::make([
                         Number::make('quantity')
                             ->translatable('sales::ui.label')
-                            ->default(1)->min(1)->buttons(),
+                            ->default(1)->min(1)->buttons()
+                            ->required(),
                     ], 4),
                     Column::make([
                         BelongsTo::make('product', resource: ProductResource::class)
@@ -112,42 +100,18 @@ class POS extends Page
 
     public function addProduct(MoonShineRequest $r)
     {
-        $r->validate(['quantity' => 'required|int|min:1']);
+        $data = $r->validate([
+            'quantity' => ['required', 'int', 'min:1'],
+            'code' => ['nullable', 'string'],
+            'productId' => ['nullable', 'int'],
+        ]);
 
-        if (empty($r->code) && empty($r->productId)) {
+        try {
+            $this->cartService->addProduct($data);
+        } catch (\DomainException $e) {
             return MoonShineJsonResponse::make()
-                ->toast(__('sales::ui.toast.enter-product'), ToastType::ERROR);
+                ->toast($e->getMessage(), ToastType::ERROR);
         }
-
-        $product = Product::when($r->productId, fn ($q) => $q->where('id', $r->productId))
-            ->when($r->code, fn ($q) => $q->whereCode($r->code))->first();
-
-        if (empty($product)) {
-            return MoonShineJsonResponse::make()
-                ->toast(__('sales::ui.toast.product-not-found'), ToastType::ERROR);
-        }
-
-        if ($product->stock < $r->quantity) {
-            return MoonShineJsonResponse::make()
-                ->toast(__('sales::ui.toast.insufficient-stock'), ToastType::ERROR);
-        }
-
-        $products = $this->getProducts();
-
-        if (isset($products[$product->id])) {
-            $products[$product->id]['quantity'] += $r->quantity;
-        } else {
-            $products[$product->id] = [
-                'id' => $product->id,
-                'code' => $product->code,
-                'name' => $product->name,
-                'price' => $product->price,
-                'quantity' => $r->quantity,
-            ];
-        }
-        $products[$product->id]['total'] = $products[$product->id]['quantity'] * $products[$product->id]['price'];
-
-        $this->putProducts($products);
 
         return MoonShineJsonResponse::make()
             ->events([
@@ -161,7 +125,7 @@ class POS extends Page
     {
         return TableBuilder::make()
             ->name('table_sale')
-            ->items(array_values($this->getProducts()))
+            ->items(array_values($this->cartService->getProducts()))
             ->fields([
                 Text::make('code')->translatable('sales::ui.label'),
                 Text::make('name')->translatable('sales::ui.label'),
@@ -180,11 +144,7 @@ class POS extends Page
 
     public function removeProduct(MoonShineRequest $r)
     {
-        $products = $this->getProducts();
-
-        unset($products[$r->id]);
-
-        $this->putProducts($products);
+        $this->cartService->removeProduct($r->input('id'));
 
         return MoonShineJsonResponse::make()
             ->events($this->events())
@@ -193,7 +153,7 @@ class POS extends Page
 
     public function cancelSale()
     {
-        $this->putProducts([]);
+        $this->cartService->putProducts([]);
 
         return MoonShineJsonResponse::make()
             ->events($this->events())
@@ -202,7 +162,7 @@ class POS extends Page
 
     public function finishSale()
     {
-        $products = $this->getProducts();
+        $products = $this->cartService->getProducts();
 
         if (empty($products)) {
             return MoonShineJsonResponse::make()
@@ -210,14 +170,14 @@ class POS extends Page
         }
 
         $sale = Sale::create([
-            'total_amount' => $this->total(),
+            'total_amount' => $this->cartService->total(),
         ]);
 
         foreach ($products as $product) {
             $sale->products()->attach($product['id'], ['quantity' => $product['quantity']]);
         }
 
-        $this->putProducts([]);
+        $this->cartService->putProducts([]);
 
         return MoonShineJsonResponse::make()
             ->events($this->events())
@@ -246,11 +206,11 @@ class POS extends Page
 
             $this->form(),
 
-            Divider::make(__('sales::ui.label.products')),
+            Divider::make(__('sales::ui.label.products'))->centered(),
 
             Fragment::make([
                 Alert::make('s.currency-dollar', 'primary')
-                    ->content(fn () => $this->total()),
+                    ->content(fn () => $this->cartService->total()),
             ])->name('alert'),
 
             $this->table(),
