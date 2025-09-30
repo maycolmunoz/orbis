@@ -134,6 +134,11 @@ class ProductResource extends ModelResource implements HasImportExportContract
                 ->format('d/M/Y')
                 ->sortable()
                 ->columnSelection(hideOnInit: true),
+
+            Date::make('updated_at')->translatable('inventories::ui.label')
+                ->format('d/M/Y')
+                ->sortable()
+                ->columnSelection(hideOnInit: true),
         ];
     }
 
@@ -143,32 +148,12 @@ class ProductResource extends ModelResource implements HasImportExportContract
     protected function formFields(): iterable
     {
         return [
-            Grid::make([
-                Column::make([
-                    Box::make([
-                        Image::make('images')->translatable('inventories::ui.label')
-                            ->dir('products')
-                            ->multiple()
-                            ->removable()
-                            ->allowedExtensions(['png', 'jpg', 'webp']),
+            Box::make([
 
+                Grid::make([
+                    Column::make([
                         Text::make('name')->translatable('inventories::ui.label')
                             ->required(),
-
-                        Textarea::make('description')->translatable('inventories::ui.label')
-                            ->required(),
-                    ]),
-                ], 6),
-
-                Column::make([
-                    Box::make([
-                        Flex::make([
-                            Number::make('code')->translatable('inventories::ui.label'),
-
-                            BelongsTo::make('category', resource: CategoryResource::class)
-                                ->translatable('inventories::ui.label')
-                                ->required(),
-                        ]),
 
                         Flex::make([
                             Text::make('price')->translatable('inventories::ui.label')
@@ -179,12 +164,32 @@ class ProductResource extends ModelResource implements HasImportExportContract
                                 ->buttons(),
                         ]),
 
+                        Textarea::make('description')->translatable('inventories::ui.label')
+                            ->required(),
+                    ], 6),
+
+                    Column::make([
+                        Flex::make([
+                            Number::make('code')->translatable('inventories::ui.label'),
+
+                            BelongsTo::make('category', resource: CategoryResource::class)
+                                ->translatable('inventories::ui.label')
+                                ->required(),
+                        ]),
+
                         BelongsTo::make('supplier', resource: SupplierResource::class)
                             ->translatable('inventories::ui.label')
                             ->nullable(),
-                    ]),
-                ], 6),
+
+                        Image::make('images')->translatable('inventories::ui.label')
+                            ->dir('products')
+                            ->multiple()
+                            ->removable()
+                            ->allowedExtensions(['png', 'jpg', 'webp']),
+                    ], 6),
+                ]),
             ]),
+
         ];
     }
 

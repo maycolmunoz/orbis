@@ -28,5 +28,6 @@ return [
         'images' => 'Imágenes',
         'image' => 'Imagen',
         'created_at' => 'Creado El',
+        'updated_at' => 'Actualizado El',
     ],
 ];
