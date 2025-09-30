@@ -7,7 +7,7 @@ namespace Modules\Inventories\MoonShine\Resources;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Validation\Rule;
 use Modules\Inventories\Models\Product;
-use Modules\Moonlaunch\Traits\Properties;
+use Modules\Moonlaunch\Traits\WithProperties;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\ImportExport\Contracts\HasImportExportContract;
@@ -32,7 +32,7 @@ use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
  */
 class ProductResource extends ModelResource implements HasImportExportContract
 {
-    use ImportExportConcern, Properties, WithRolePermissions;
+    use ImportExportConcern, WithProperties, WithRolePermissions;
 
     protected string $model = Product::class;
 

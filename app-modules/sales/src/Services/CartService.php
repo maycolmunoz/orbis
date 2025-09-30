@@ -16,6 +16,18 @@ class CartService
         session()->put('products', $products);
     }
 
+    public function incrementQuantity(string|int $id): void
+    {
+        $products = $this->getProducts();
+
+        if (isset($products[$id])) {
+            $products[$id]['quantity']++;
+            $products[$id]['total'] = $products[$id]['quantity'] * $products[$id]['price'];
+        }
+
+        $this->putProducts($products);
+    }
+
     public function removeProduct(string|int $id): void
     {
         $products = $this->getProducts();

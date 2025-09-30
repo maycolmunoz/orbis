@@ -5,7 +5,7 @@ namespace Modules\Moonlaunch\Traits;
 use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\PageType;
 
-trait Properties
+trait WithProperties
 {
     /**
      * Setter genérico

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\Sales\MoonShine\Resources;
 
 use Modules\Inventories\MoonShine\Resources\ProductResource;
-use Modules\Moonlaunch\Traits\Properties;
+use Modules\Moonlaunch\Traits\WithProperties;
 use Modules\Sales\Models\Sale;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Enums\Action;
@@ -24,7 +24,7 @@ use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
  */
 class SaleResource extends ModelResource
 {
-    use Properties, WithRolePermissions;
+    use WithProperties, WithRolePermissions;
 
     protected string $model = Sale::class;
 

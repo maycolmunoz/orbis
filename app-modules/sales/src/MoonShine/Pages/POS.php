@@ -131,7 +131,9 @@ class POS extends Page
                 Text::make('name')->translatable('sales::ui.label'),
                 Text::make('price')->translatable('sales::ui.label'),
                 Text::make('quantity')->translatable('sales::ui.label'),
-                Text::make('total')->translatable('sales::ui.label'),
+                Text::make('total')->translatable('sales::ui.label')
+                    ->sortable()
+                    ->badge(),
             ])
             ->async()
             ->buttons([

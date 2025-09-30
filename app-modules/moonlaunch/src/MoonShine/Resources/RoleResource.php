@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\Moonlaunch\MoonShine\Resources;
 
 use Modules\Moonlaunch\Models\Role;
-use Modules\Moonlaunch\Traits\Properties;
+use Modules\Moonlaunch\Traits\WithProperties;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Enums\Action;
@@ -25,8 +25,8 @@ use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
  */
 class RoleResource extends ModelResource
 {
-    use Properties;
     use WithPermissionsFormComponent;
+    use WithProperties;
     use WithRolePermissions;
 
     protected string $model = Role::class;

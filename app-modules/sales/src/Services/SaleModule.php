@@ -35,11 +35,6 @@ class SaleModule
                     ->translatable('sales::ui.resource'),
 
             ], 's.computer-desktop')->translatable('sales::ui.resource'),
-
-            // MenuGroup::make('CRM', [
-            //     MenuItem::make('Clientes', CustomerResource::class),
-            // ], 's.briefcase')
-
         );
     }
 }

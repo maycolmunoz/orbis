@@ -7,7 +7,8 @@ namespace Modules\Inventories\MoonShine\Resources;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Validation\Rule;
 use Modules\Inventories\Models\Supplier;
-use Modules\Moonlaunch\Traits\Properties;
+use Modules\Moonlaunch\Traits\WithProperties;
+use Modules\Moonlaunch\Traits\WithSoftDeletes;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Resources\ModelResource;
@@ -27,7 +28,7 @@ use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
  */
 class SupplierResource extends ModelResource
 {
-    use Properties, WithRolePermissions;
+    use WithProperties, WithRolePermissions, WithSoftDeletes;
 
     protected string $model = Supplier::class;
 
