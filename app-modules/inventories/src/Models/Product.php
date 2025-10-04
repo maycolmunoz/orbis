@@ -11,6 +11,13 @@ class Product extends Model
     use HasFactory;
 
     /**
+     * table name
+     *
+     * @var string
+     */
+    protected $table = 'inventories_products';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array

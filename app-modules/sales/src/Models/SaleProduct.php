@@ -12,6 +12,13 @@ class SaleProduct extends Model
     use HasFactory;
 
     /**
+     * table name
+     *
+     * @var string
+     */
+    protected $table = 'sales_product_sale';
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('inventories_products', function (Blueprint $table) {
             $table->id();
             $table->string('code', 14)->unique();
             $table->string('name', 100);
@@ -21,12 +21,12 @@ return new class extends Migration
             $table->unsignedInteger('stock');
 
             $table->foreignId('category_id')
-                ->constrained()
-                ->cascadeOnDelete('categories');
+                ->constrained('inventories_categories')
+                ->cascadeOnDelete();
 
             $table->foreignId('supplier_id')
                 ->nullable()
-                ->constrained('suppliers')
+                ->constrained('inventories_suppliers')
                 ->cascadeOnDelete();
 
             $table->timestamps();
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('inventories_products');
     }
 };

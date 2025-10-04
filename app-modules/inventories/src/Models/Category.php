@@ -12,6 +12,13 @@ class Category extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * table name
+     *
+     * @var string
+     */
+    protected $table = 'inventories_categories';
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool

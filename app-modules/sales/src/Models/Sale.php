@@ -14,6 +14,13 @@ class Sale extends Model
     use HasFactory;
 
     /**
+     * table name
+     *
+     * @var string
+     */
+    protected $table = 'sales_sales';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -41,6 +48,7 @@ class Sale extends Model
 
     public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class, 'sale_products')->withPivot('quantity');
+        return $this->belongsToMany(Product::class, 'sales_product_sale')
+            ->withPivot('quantity');
     }
 }

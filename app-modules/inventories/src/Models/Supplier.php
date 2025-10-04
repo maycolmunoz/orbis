@@ -12,6 +12,13 @@ class Supplier extends Model
     use HasFactory, SoftDeletes;
 
     /**
+     * table name
+     *
+     * @var string
+     */
+    protected $table = 'inventories_suppliers';
+
+    /**
      * Indicates if the model should be timestamped.
      *
      * @var bool
