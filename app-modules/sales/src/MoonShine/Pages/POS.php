@@ -68,7 +68,27 @@ class POS extends Page
         ];
     }
 
-    private function form()
+    /**
+     * toast
+     *
+     * @param  mixed  $message
+     * @param  mixed  $type
+     * @param  mixed  $events
+     */
+    private function toast(string $message, ToastType $type, ?array $events = []): MoonShineJsonResponse
+    {
+        return MoonShineJsonResponse::make()
+            ->toast($message, $type)
+            ->events([
+                ...$this->events(),
+                ...$events,
+            ]);
+    }
+
+    /**
+     * form
+     */
+    private function form(): FormBuilder
     {
         return FormBuilder::make()
             ->asyncMethod('addProduct')
@@ -98,7 +118,12 @@ class POS extends Page
             ]);
     }
 
-    public function addProduct(MoonShineRequest $r)
+    /**
+     * addProduct
+     *
+     * @param  mixed  $r
+     */
+    public function addProduct(MoonShineRequest $r): MoonShineJsonResponse
     {
         $data = $r->validate([
             'quantity' => ['required', 'int', 'min:1'],
@@ -109,19 +134,18 @@ class POS extends Page
         try {
             $this->cartService->addProduct($data);
         } catch (\DomainException $e) {
-            return MoonShineJsonResponse::make()
-                ->toast($e->getMessage(), ToastType::ERROR);
+            return $this->toast($e->getMessage(), ToastType::ERROR);
         }
 
-        return MoonShineJsonResponse::make()
-            ->events([
-                ...$this->events(),
-                AlpineJs::event(JsEvent::FORM_RESET, 'form_sale'),
-            ])
-            ->toast(__('sales::ui.toast.added-product'), ToastType::INFO);
+        return $this->toast(__('sales::ui.toast.added-product'),
+            ToastType::INFO,
+            [AlpineJs::event(JsEvent::FORM_RESET, 'form_sale')]);
     }
 
-    private function table()
+    /**
+     * table
+     */
+    private function table(): TableBuilder
     {
         return TableBuilder::make()
             ->name('table_sale')
@@ -144,31 +168,37 @@ class POS extends Page
             ]);
     }
 
-    public function removeProduct(MoonShineRequest $r)
+    /**
+     * removeProduct
+     *
+     * @param  mixed  $r
+     */
+    public function removeProduct(MoonShineRequest $r): MoonShineJsonResponse
     {
         $this->cartService->removeProduct($r->input('id'));
 
-        return MoonShineJsonResponse::make()
-            ->events($this->events())
-            ->toast(__('sales::ui.toast.removed-product'), ToastType::INFO);
+        return $this->toast(__('sales::ui.toast.removed-product'), ToastType::INFO);
     }
 
-    public function cancelSale()
+    /**
+     * cancelSale
+     */
+    public function cancelSale(): MoonShineJsonResponse
     {
         $this->cartService->putProducts([]);
 
-        return MoonShineJsonResponse::make()
-            ->events($this->events())
-            ->toast(__('sales::ui.toast.cancelled-sale'), ToastType::INFO);
+        return $this->toast(__('sales::ui.toast.cancelled-sale'), ToastType::INFO);
     }
 
-    public function finishSale()
+    /**
+     * finishSale
+     */
+    public function finishSale(): MoonShineJsonResponse
     {
         $products = $this->cartService->getProducts();
 
         if (empty($products)) {
-            return MoonShineJsonResponse::make()
-                ->toast(__('sales::ui.toast.empty-sale'), ToastType::ERROR);
+            return $this->toast(__('sales::ui.toast.empty-sale'), ToastType::ERROR);
         }
 
         $sale = Sale::create([
@@ -181,9 +211,7 @@ class POS extends Page
 
         $this->cartService->putProducts([]);
 
-        return MoonShineJsonResponse::make()
-            ->events($this->events())
-            ->toast(__('sales::ui.toast.completed-sale'), ToastType::SUCCESS);
+        return $this->toast(__('sales::ui.toast.completed-sale'), ToastType::SUCCESS);
     }
 
     /**
