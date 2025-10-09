@@ -36,8 +36,6 @@ class Sale extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
-        'customer_id' => 'integer',
         'total_amount' => 'decimal:2',
     ];
 

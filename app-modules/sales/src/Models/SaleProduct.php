@@ -36,17 +36,6 @@ class SaleProduct extends Model
         'quantity',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-        'sale_id' => 'integer',
-        'product_id' => 'integer',
-    ];
-
     public function sale(): BelongsTo
     {
         return $this->belongsTo(Sale::class);

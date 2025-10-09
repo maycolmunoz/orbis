@@ -18,7 +18,7 @@ use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Text;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
-#[Icon('s.clipboard-document-list')]
+#[Icon('clipboard-document-list')]
 /**
  * @extends ModelResource<Sale>
  */

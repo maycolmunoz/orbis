@@ -28,7 +28,7 @@ use MoonShine\UI\Components\Table\TableBuilder;
 use MoonShine\UI\Fields\Number;
 use MoonShine\UI\Fields\Text;
 
-#[Icon('s.arrow-down-on-square')]
+#[Icon('arrow-down-on-square')]
 class POS extends Page
 {
     protected ?string $alias = 'pos';
