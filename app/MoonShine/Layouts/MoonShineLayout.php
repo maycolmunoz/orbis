@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\MoonShine\Layouts;
 
 use Modules\Inventories\Services\InventoryModule;
-use Modules\Moonlaunch\Services\Launch;
+use Modules\MoonLaunch\Services\Launch;
 use Modules\Sales\Services\SaleModule;
 use MoonShine\ColorManager\ColorManager;
 use MoonShine\Contracts\ColorManager\ColorManagerContract;

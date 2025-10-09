@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Moonlaunch\Traits;
+namespace Modules\MoonLaunch\Traits;
 
 use MoonShine\Support\Enums\ClickAction;
 use MoonShine\Support\Enums\PageType;
@@ -8,7 +8,7 @@ use MoonShine\Support\Enums\PageType;
 trait WithProperties
 {
     /**
-     * Setter genérico
+     * Setter
      */
     protected function set(string $property, mixed $value): static
     {

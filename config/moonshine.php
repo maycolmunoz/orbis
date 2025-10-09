@@ -7,7 +7,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Modules\Moonlaunch\Models\User;
+use Modules\MoonLaunch\Models\User;
 use MoonShine\Laravel\Exceptions\MoonShineNotFoundException;
 use MoonShine\Laravel\Forms\FiltersForm;
 use MoonShine\Laravel\Forms\LoginForm;

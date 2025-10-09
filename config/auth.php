@@ -62,7 +62,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', Modules\Moonlaunch\Models\User::class),
+            'model' => env('AUTH_MODEL', Modules\MoonLaunch\Models\User::class),
         ],
 
         // 'users' => [

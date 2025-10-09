@@ -14,7 +14,7 @@
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.9",
         "modules/inventories": "^1.0",
-        "modules/moonlaunch": "^1.0",
+        "modules/moon-launch": "^1.0",
         "modules/sales": "^1.0",
         "moonshine/import-export": "^1.0",
         "moonshine/moonshine": "^3.4",

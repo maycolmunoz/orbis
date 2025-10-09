@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Modules\Sales\MoonShine\Resources;
 
 use Modules\Inventories\MoonShine\Resources\ProductResource;
-use Modules\Moonlaunch\Traits\WithProperties;
+use Modules\MoonLaunch\Traits\WithProperties;
 use Modules\Sales\Models\Sale;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\Laravel\Enums\Action;

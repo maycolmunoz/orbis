@@ -7,7 +7,7 @@ namespace Modules\Inventories\MoonShine\Resources;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Validation\Rule;
 use Modules\Inventories\Models\Product;
-use Modules\Moonlaunch\Traits\WithProperties;
+use Modules\MoonLaunch\Traits\WithProperties;
 use MoonShine\Contracts\UI\ComponentContract;
 use MoonShine\Contracts\UI\FieldContract;
 use MoonShine\ImportExport\Contracts\HasImportExportContract;
