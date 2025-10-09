@@ -19,7 +19,6 @@ class InventoriesServiceProvider extends ServiceProvider
         ColorManagerContract $colorManager,
         InventoryModule $inventories): void
     {
-
         $core->resources($inventories->getResources());
     }
 }

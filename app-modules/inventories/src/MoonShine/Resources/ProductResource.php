@@ -26,7 +26,7 @@ use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Textarea;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
-#[Icon('s.square2x2')]
+#[Icon('squares-2x2')]
 /**
  * @extends ModelResource<Product>
  */

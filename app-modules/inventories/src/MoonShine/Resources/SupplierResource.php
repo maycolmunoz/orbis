@@ -22,7 +22,7 @@ use MoonShine\UI\Fields\Text;
 use MoonShine\UI\Fields\Url;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
-#[Icon('s.truck')]
+#[Icon('truck')]
 /**
  * @extends ModelResource<Supplier>
  */

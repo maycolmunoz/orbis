@@ -34,15 +34,6 @@ class Category extends Model
         'name',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'id' => 'integer',
-    ];
-
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);

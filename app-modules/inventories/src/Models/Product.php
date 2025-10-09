@@ -39,11 +39,8 @@ class Product extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
         'images' => 'array',
         'price' => 'decimal:2',
-        'category_id' => 'integer',
-        'supplier_id' => 'integer',
     ];
 
     public function category(): BelongsTo

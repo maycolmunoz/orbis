@@ -20,7 +20,7 @@ use MoonShine\UI\Components\Layout\Box;
 use MoonShine\UI\Fields\Text;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
-#[Icon('s.tag')]
+#[Icon('tag')]
 /**
  * @extends ModelResource<Category>
  */

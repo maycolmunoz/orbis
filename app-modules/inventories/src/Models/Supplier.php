@@ -41,7 +41,6 @@ class Supplier extends Model
      * @var array
      */
     protected $casts = [
-        'id' => 'integer',
         'contact_info' => 'array',
     ];
 
