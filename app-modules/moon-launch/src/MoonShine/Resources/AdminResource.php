@@ -20,7 +20,6 @@ use MoonShine\UI\Components\Tabs;
 use MoonShine\UI\Components\Tabs\Tab;
 use MoonShine\UI\Fields\Date;
 use MoonShine\UI\Fields\Email;
-use MoonShine\UI\Fields\ID;
 use MoonShine\UI\Fields\Image;
 use MoonShine\UI\Fields\Password;
 use MoonShine\UI\Fields\PasswordRepeat;
@@ -28,7 +27,7 @@ use MoonShine\UI\Fields\Text;
 use Sweet1s\MoonshineRBAC\Traits\WithRoleFormComponent;
 use Sweet1s\MoonshineRBAC\Traits\WithRolePermissions;
 
-#[Icon('s.user-group')]
+#[Icon('user-group')]
 /**
  * @extends ModelResource<User>
  */
@@ -55,10 +54,7 @@ class AdminResource extends ModelResource
      */
     protected function indexFields(): iterable
     {
-
         return [
-            ID::make()->sortable(),
-
             //  Image::make('avatar')->translatable('moon-launch::ui.resource')
             //     ->modifyRawValue(fn(?string $raw): string => $raw ?? ''),
 
@@ -67,7 +63,7 @@ class AdminResource extends ModelResource
             BelongsToMany::make('roles')->translatable('moon-launch::ui.resource')
                 ->inLine(
                     separator: ' ',
-                    badge: fn ($model, $value) => Badge::make((string) $value, 'primary'),
+                    badge: fn ($model, $value) => Badge::make((string) $value, 'primary')
                 ),
 
             Email::make('email')->translatable('moon-launch::ui.resource'),
@@ -84,35 +80,27 @@ class AdminResource extends ModelResource
             Box::make([
                 Tabs::make([
                     Tab::make(__('moon-launch::ui.resource.main_information'), [
-                        ID::make()->sortable(),
-
                         Flex::make([
                             Text::make('name')->translatable('moon-launch::ui.resource')
                                 ->required(),
-
                             Email::make('email')->translatable('moon-launch::ui.resource')
                                 ->required(),
                         ]),
-
-                        // Image::make('avatar')->translatable('moon-launch::ui.resource')
-                        //     ->disk(moonshineConfig()->getDisk())
-                        //     ->dir('moonshine_users')
-                        //     ->allowedExtensions(['jpg', 'png', 'jpeg', 'gif']),
 
                         Flex::make([
                             Password::make('password')->translatable('moon-launch::ui.resource')
                                 ->customAttributes(['autocomplete' => 'new-password'])
                                 ->eye(),
-
                             PasswordRepeat::make('password_repeat')
                                 ->translatable('moon-launch::ui.resource')
                                 ->customAttributes(['autocomplete' => 'confirm-password'])
                                 ->eye(),
-                        ])->canSee(fn () => ! $this->item),
+                        ])->canSee(fn () => $this->isCreateFormPage()),
 
-                        Date::make('created_at')->translatable('moon-launch::ui.resource')
-                            ->format('d.m.Y')
-                            ->default(now()->toDateTimeString()),
+                        // Image::make('avatar')->translatable('moon-launch::ui.resource')
+                        //     ->disk(moonshineConfig()->getDisk())
+                        //     ->dir('moonshine_users')
+                        //     ->allowedExtensions(['jpg', 'png', 'jpeg', 'gif']),
                     ])->icon('user-circle'),
 
                     Tab::make(__('moon-launch::ui.resource.password'), [
@@ -120,14 +108,12 @@ class AdminResource extends ModelResource
                             Password::make('password')->translatable('moon-launch::ui.resource')
                                 ->customAttributes(['autocomplete' => 'new-password'])
                                 ->eye(),
-
                             PasswordRepeat::make('password_repeat')
                                 ->translatable('moon-launch::ui.resource')
                                 ->customAttributes(['autocomplete' => 'confirm-password'])
                                 ->eye(),
                         ])->icon('lock-closed'),
-                    ])->canSee(fn () => $this->item)
-                        ->icon('lock-closed'),
+                    ])->canSee(fn () => $this->isUpdateFormPage())->icon('lock-closed'),
                 ]),
             ]),
         ];

@@ -29,10 +29,6 @@ class Launch
 
                 MenuItem::make('roles', RoleResource::class)
                     ->translatable('moon-launch::ui.resource'),
-
-                MenuItem::make('permissions', PermissionResource::class)
-                    ->translatable('moonshine-rbac::ui')
-                    ->icon('s.shield-check'),
             ])
                 ->translatable('moonshine::ui.resource')
                 ->icon('m.cube')
